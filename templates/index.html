@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Skill Swap Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" />
+</head>
+
+<body>
+  <!-- Canvas background (converted from TSX) -->
+  <canvas id="bg-canvas" class="animated-bg"></canvas>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="https://png.pngtree.com/png-clipart/20200701/original/pngtree-remote-team-working-meeting-online-or-work-from-home-png-image_5366337.jpg" alt="Logo" />
+      <span>Skill Swap</span>
+    </div>
+    <nav>
+      <a href="#" class="active">Dashboard</a>
+      <a href="#">Find Skills</a>
+      <a href="#">My Swaps</a>
+      <a href="#">Messages</a>
+      <a href="#">Community</a>
+      <a href="#">Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      {% if user_name %}
+      <span>Welcome, {{ user_name }}!</span>
+      <form action="{{ url_for('logout') }}" method="get">
+        <button class="btn-secondary">Log Out</button>
+      </form>
+      {% else %}
+      <button id="sidebar-signup" class="btn-primary" onclick="openModal('signup')">Sign Up</button>
+      <button id="sidebar-login" class="btn-secondary" onclick="openModal('login')">Log In</button>
+      {% endif %}
+    </div>
+  </aside>
+
+  <main>
+    <header class="main-header">
+      <h1>Welcome to Skill Swap</h1>
+      <p>Connect with peers, teach your skills, and learn something new every day. Discover ongoing swaps and trending skills below.</p>
+    </header>
+
+    <section class="skill-grid">
+      {% for swap in swaps %}
+      <div class="skill-card">
+        <img src="{{ swap.avatar_url }}" alt="Peer Avatar" />
+        <h2>{{ swap.teacher_name }}</h2>
+        <p>Teaching: {{ swap.teaching_skill }}<br>Learning: {{ swap.learning_skill }}</p>
+        <button class="btn-join" onclick="joinSwap({{ swap.id }})">Swap Now</button>
+      </div>
+      {% endfor %}
+    </section>
+
+    <section class="cta-banner">
+      <h2>Start a New Skill Swap Today</h2>
+      <button class="btn-primary" id="banner-signup" onclick="openModal('signup')">Begin Your Journey →</button>
+    </section>
+  </main>
+
+  <div class="modal" id="modal">
+    <div class="modal-box" id="modal-box">
+      <span class="close-modal" id="close-modal">&times;</span>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
